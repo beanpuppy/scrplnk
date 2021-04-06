@@ -1,6 +1,6 @@
 (ns scrplnk.core
-  (:require [clojure.tools.cli :refer [parse-opts]])
-  (:require [clojure.string :as str]
+  (:require [clojure.tools.cli :refer [parse-opts]]
+            [clojure.string :as str]
             [clj-http.client :as client]
             [net.cgrand.enlive-html :as html]
             [org.bovinegenius.exploding-fish :refer [uri host absolute? resolve-uri fragment scheme]]))
