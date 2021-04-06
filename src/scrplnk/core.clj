@@ -40,6 +40,5 @@
         (let [b (get (:arguments opts) 0)]
           (def base b)
           (def seen (conj seen base))
-          (println b)
           (scrape-links base)))
       (println (:summary opts)))))
