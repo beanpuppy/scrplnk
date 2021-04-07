@@ -2,7 +2,7 @@
   (:require [clojure.tools.cli :refer [parse-opts]]
             [clj-http.client :as client]
             [net.cgrand.enlive-html :as html]
-            [org.bovinegenius.exploding-fish :refer [uri host absolute? resolve-uri fragment scheme]]))
+            [org.bovinegenius.exploding-fish :refer [uri absolute? resolve-uri fragment scheme]]))
 
 (def base)
 (def seen [])
