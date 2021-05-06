@@ -2,10 +2,7 @@
   (:require [clojure.tools.cli :refer [parse-opts]]
             [clj-http.client :as client]
             [net.cgrand.enlive-html :as html]
-            [org.bovinegenius.exploding-fish :refer [uri absolute? resolve-uri fragment scheme]]))
-
-(def base)
-(def seen [])
+            [org.bovinegenius.exploding-fish :refer [absolute? resolve-uri fragment]]))
 
 (defn link->dom [link]
   (html/html-snippet
@@ -20,13 +17,13 @@
 (defn dom->relative [dom]
   (filter (fn [x] (and (not (fragment? x)) (not (absolute? x)))) (dom->links dom)))
 
-(defn scrape-links [link]
+(defn scrape-links [link base seen]
   (doseq [dom (link->dom link)]
     (doseq [l (filter (fn [x] (not (.contains seen (resolve-uri base x)))) (dom->relative dom))]
-      (let [url (resolve-uri base l)]
-        (def seen (conj seen url))
-        (println url)
-        (scrape-links url)))))
+      (let [url (resolve-uri base l)
+            seen (conj seen url)]
+          (println url)
+          (scrape-links url base seen)))))
 
 (def cli-options
   [["-s" "--site" "Base url of site to scrape."]
@@ -35,9 +32,8 @@
 (defn -main [& args]
   (let [opts (parse-opts args cli-options)]
     (if (-> opts :options :site)
-      (do
-        (let [b (get (:arguments opts) 0)]
-          (def base b)
-          (def seen (conj seen base))
-          (scrape-links base)))
+      (let [b (get (:arguments opts) 0)
+            base b
+            seen [base]]
+        (scrape-links base base seen))
       (println (:summary opts)))))
